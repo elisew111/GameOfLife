@@ -1,0 +1,10 @@
+C:\Users\elise\OneDrive\Documenten\Gametech\Concurrency\P3\starting-framework\starting-framework\OpenCL\bin\Debug\ConsoleApplication.exe
+C:\Users\elise\OneDrive\Documenten\Gametech\Concurrency\P3\starting-framework\starting-framework\OpenCL\bin\Debug\ConsoleApplication.pdb
+C:\Users\elise\OneDrive\Documenten\Gametech\Concurrency\P3\starting-framework\starting-framework\OpenCL\bin\Debug\Cloo.clSharp.dll
+C:\Users\elise\OneDrive\Documenten\Gametech\Concurrency\P3\starting-framework\starting-framework\OpenCL\bin\Debug\OpenTK.dll
+C:\Users\elise\OneDrive\Documenten\Gametech\Concurrency\P3\starting-framework\starting-framework\OpenCL\bin\Debug\OpenTK.pdb
+C:\Users\elise\OneDrive\Documenten\Gametech\Concurrency\P3\starting-framework\starting-framework\OpenCL\bin\Debug\OpenTK.xml
+C:\Users\elise\OneDrive\Documenten\Gametech\Concurrency\P3\starting-framework\starting-framework\OpenCL\obj\x86\Debug\OCL-GoL.csprojResolveAssemblyReference.cache
+C:\Users\elise\OneDrive\Documenten\Gametech\Concurrency\P3\starting-framework\starting-framework\OpenCL\obj\x86\Debug\OCL-GoL.csproj.CoreCompileInputs.cache
+C:\Users\elise\OneDrive\Documenten\Gametech\Concurrency\P3\starting-framework\starting-framework\OpenCL\obj\x86\Debug\ConsoleApplication.exe
+C:\Users\elise\OneDrive\Documenten\Gametech\Concurrency\P3\starting-framework\starting-framework\OpenCL\obj\x86\Debug\ConsoleApplication.pdb
