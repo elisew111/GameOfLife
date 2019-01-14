@@ -1,9 +1,9 @@
 // #define GLINTEROP
 
 #ifdef GLINTEROP
-__kernel void device_function( write_only image2d_t a, float t )
+__kernel void device_function( write_only image2d_t a, , uint w, uint h)
 #else
-__kernel void device_function( __global int* a, float t )
+__kernel void device_function( __global int* a, uint w, uint h)
 #endif
 {
 	// adapted from inigo quilez - iq/2013
@@ -13,7 +13,14 @@ __kernel void device_function( __global int* a, float t )
 	if (id >= (512 * 512)) return;
 	float2 fragCoord = (float2)( (float)idx, (float)idy ), resolution = (float2)( 512, 512 );
 	float3 col = (float3)( 0.f, 0.f, 0.f );
-	for( int m = 0; m < 4; m++ ) for( int n = 0; n < 4; n++ )
+
+	for( int y = 1; y < h - 1; y++ ) for( int x = 1; x < w - 1; x++ )
+	{
+
+	}
+
+
+	/*for( int m = 0; m < 4; m++ ) for( int n = 0; n < 4; n++ )
 	{
 		float2 p = -resolution + 2.f * (fragCoord + (float2)( .5f * (float)m, .5f * (float)n ));
 		float w = (float)( 2 * m + n ), l = 0.0f;
@@ -33,7 +40,7 @@ __kernel void device_function( __global int* a, float t )
 		float al = smoothstep( -.1f, 0.f, 1.f );
 		l = mix( l, sl, al );
 		col += .5f + .5f * cos( 3.f + l * 0.15f + (float3)( .0f, .6f, 1.f ) );
-	}
+	}*/
 #ifdef GLINTEROP
 	int2 pos = (int2)(idx,idy);
 	write_imagef( a, pos, (float4)(col * (1.0f / 16.0f), 1.0f ) );
