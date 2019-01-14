@@ -8,3 +8,14 @@ C:\Users\elise\OneDrive\Documenten\Gametech\Concurrency\P3\starting-framework\st
 C:\Users\elise\OneDrive\Documenten\Gametech\Concurrency\P3\starting-framework\starting-framework\OpenCL\obj\x86\Debug\OCL-GoL.csproj.CoreCompileInputs.cache
 C:\Users\elise\OneDrive\Documenten\Gametech\Concurrency\P3\starting-framework\starting-framework\OpenCL\obj\x86\Debug\ConsoleApplication.exe
 C:\Users\elise\OneDrive\Documenten\Gametech\Concurrency\P3\starting-framework\starting-framework\OpenCL\obj\x86\Debug\ConsoleApplication.pdb
+C:\Users\Menno\Source\Repos\GameOfLife\bin\Debug\ConsoleApplication.exe
+C:\Users\Menno\Source\Repos\GameOfLife\bin\Debug\ConsoleApplication.pdb
+C:\Users\Menno\Source\Repos\GameOfLife\bin\Debug\Cloo.clSharp.dll
+C:\Users\Menno\Source\Repos\GameOfLife\bin\Debug\OpenTK.dll
+C:\Users\Menno\Source\Repos\GameOfLife\bin\Debug\OpenTK.pdb
+C:\Users\Menno\Source\Repos\GameOfLife\bin\Debug\OpenTK.xml
+C:\Users\Menno\Source\Repos\GameOfLife\obj\x86\Debug\OCL-GoL.csprojAssemblyReference.cache
+C:\Users\Menno\Source\Repos\GameOfLife\obj\x86\Debug\OCL-GoL.csproj.CoreCompileInputs.cache
+C:\Users\Menno\Source\Repos\GameOfLife\obj\x86\Debug\OCL-GoL.csproj.CopyComplete
+C:\Users\Menno\Source\Repos\GameOfLife\obj\x86\Debug\ConsoleApplication.exe
+C:\Users\Menno\Source\Repos\GameOfLife\obj\x86\Debug\ConsoleApplication.pdb

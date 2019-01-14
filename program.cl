@@ -7,7 +7,7 @@ __kernel void device_function( __global int* a, float t )
 #endif
 {
 	// adapted from inigo quilez - iq/2013
-	int idx = get_global_id( 0 );
+	/*int idx = get_global_id( 0 );
 	int idy = get_global_id( 1 );
 	int id = idx + 512 * idy;
 	if (id >= (512 * 512)) return;
@@ -33,7 +33,22 @@ __kernel void device_function( __global int* a, float t )
 		float al = smoothstep( -.1f, 0.f, 1.f );
 		l = mix( l, sl, al );
 		col += .5f + .5f * cos( 3.f + l * 0.15f + (float3)( .0f, .6f, 1.f ) );
+	}*/
+	// clear destination pattern
+            for( int i = 0; i < pw * ph; i++ ) pattern[i] = 0;
+            // process all pixels, skipping one pixel boundary
+            uint w = pw * 32, h = ph;
+            for( uint y = 1; y < h - 1; y++ ) for( uint x = 1; x < w - 1; x++ )
+            {
+                // count active neighbors
+                uint n = GetBit( x - 1, y - 1 ) + GetBit( x, y - 1 ) + GetBit( x + 1, y - 1 ) + GetBit( x - 1, y ) +
+                    GetBit( x + 1, y ) + GetBit( x - 1, y + 1 ) + GetBit( x, y + 1 ) + GetBit( x + 1, y + 1 );
+                if ((GetBit( x, y ) == 1 && n ==2) || n == 3) BitSet( x, y );
+            }
+            // swap buffers
+            for( int i = 0; i < pw * ph; i++ ) second[i] = pattern[i];
 	}
+
 #ifdef GLINTEROP
 	int2 pos = (int2)(idx,idy);
 	write_imagef( a, pos, (float4)(col * (1.0f / 16.0f), 1.0f ) );
