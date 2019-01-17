@@ -60,6 +60,9 @@
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
     <None Include="program.cl" />
+    <None Include="samples\c4-orthogonal.rle" />
+    <None Include="samples\metapixel-galaxy.rle" />
+    <None Include="samples\turing_js_r.rle" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="assets\font.png" />

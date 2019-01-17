@@ -1,12 +1,13 @@
 // #define GLINTEROP
 
 
-uint GetBit( uint x, uint y, uint pw, __global uint* second ) { return (second[y * pw + (x >> 5)] >> (int)(x & 31)) & 1U; }
+uint GetBit( int x, int y, uint pw, __global uint* second ) { return (second[y * pw + (x >> 5)] >> (int)(x & 31)) & 1U; }
+void BitSet( int x, int y, uint pw, __global uint* pattern) { pattern[y * pw + (x >> 5)] |= 1U << (int)(x & 31); }
 
 #ifdef GLINTEROP
-__kernel void device_function( write_only image2d_t a, uint pw, uint h, uint x, uint y)
+__kernel void device_function( write_only image2d_t a, uint pw, uint h)
 #else
-__kernel void device_function( __global uint* a, uint pw, uint h, uint x, uint y)
+__kernel void device_function( __global uint* a, uint pw, uint h)
 #endif
 {
 	// adapted from inigo quilez - iq/2013
@@ -21,9 +22,9 @@ __kernel void device_function( __global uint* a, uint pw, uint h, uint x, uint y
 
 	
 
-	n = GetBit( x - 1, y - 1, pw, a) + GetBit( x, y - 1, pw, a) + GetBit( x + 1, y - 1, pw, a) + GetBit( x - 1, y, pw, a) +
-		GetBit( x + 1, y, pw, a) + GetBit( x - 1, y + 1, pw, a) + GetBit( x, y + 1, pw, a) + GetBit( x + 1, y + 1, pw, a);
-    if ((GetBit( x, y, pw, a) == 1 && n ==2) || n == 3) col = (float3)(1.0f, 1.0f, 1.0f);
+	n = GetBit( idx - 1, idy - 1, pw, a) + GetBit( idx, idy - 1, pw, a) + GetBit( idx + 1, idy - 1, pw, a) + GetBit( idx - 1, idy, pw, a) +
+		GetBit( idx + 1, idy, pw, a) + GetBit( idx - 1, idy + 1, pw, a) + GetBit( idx, idy + 1, pw, a) + GetBit( idx + 1, idy + 1, pw, a);
+    if ((GetBit( idx, idy, pw, a) == 1 && n ==2) || n == 3) BitSet( idx, idy, pw, a);
 
 
 

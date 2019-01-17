@@ -2,6 +2,7 @@
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -24,9 +25,46 @@ namespace Template
         public Surface screen;
         Stopwatch timer = new Stopwatch();
         float t = 21.5f;
+
+        uint[] pattern;
+        uint[] second;
+        uint pw, ph, w; // note: pw is in uints; width in bits is 32 this value.
+        void BitSet(uint x, uint y) { pattern[y * pw + (x >> 5)] |= 1U << (int)(x & 31); }
+
         public void Init()
         {
-            // nothing here
+            //gekopieerd uit gameoflife
+            StreamReader sr = new StreamReader("../../samples/turing_js_r.rle");
+            uint state = 0, n = 0, x = 0, y = 0;
+            while (true)
+            {
+                String line = sr.ReadLine();
+                if (line == null) break; // end of file
+                int pos = 0;
+                if (line[pos] == '#') continue; /* comment line */
+                else if (line[pos] == 'x') // header
+                {
+                    String[] sub = line.Split(new char[] { '=', ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    pw = (UInt32.Parse(sub[1]) + 31) / 32;
+                    ph = UInt32.Parse(sub[3]);
+                    w = pw * 32;
+                    pattern = new uint[pw * ph];
+                    second = new uint[pw * ph];
+                }
+                else while (pos < line.Length)
+                    {
+                        Char c = line[pos++];
+                        if (state == 0) if (c < '0' || c > '9') { state = 1; n = Math.Max(n, 1); } else n = (uint)(n * 10 + (c - '0'));
+                        if (state == 1) // expect other character
+                        {
+                            if (c == '$') { y += n; x = 0; } // newline
+                            else if (c == 'o') for (int i = 0; i < n; i++) BitSet(x++, y); else if (c == 'b') x += n;
+                            state = n = 0;
+                        }
+                    }
+            }
+            // swap buffers
+            for (int i = 0; i < pw * ph; i++) second[i] = pattern[i];
         }
         public void Tick()
         {
@@ -34,9 +72,10 @@ namespace Template
             // clear the screen
             screen.Clear( 0 );
             // do opencl stuff
-            if (GLInterop) kernel.SetArgument( 0, image );
+            if (GLInterop) kernel.SetArgument( 0, image);
             else kernel.SetArgument( 0, buffer );
-            kernel.SetArgument( 1, t );
+            kernel.SetArgument( 1, pw);
+            kernel.SetArgument(2, ph);
             t += 0.1f;
             // execute kernel
             long [] workSize = { 512, 512 };
