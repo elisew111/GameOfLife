@@ -1,9 +1,12 @@
 // #define GLINTEROP
 
+
+uint GetBit( uint x, uint y, uint pw, __global uint* second ) { return (second[y * pw + (x >> 5)] >> (int)(x & 31)) & 1U; }
+
 #ifdef GLINTEROP
-__kernel void device_function( write_only image2d_t a, , uint w, uint h)
+__kernel void device_function( write_only image2d_t a, uint pw, uint h, uint x, uint y)
 #else
-__kernel void device_function( __global int* a, uint w, uint h)
+__kernel void device_function( __global uint* a, uint pw, uint h, uint x, uint y)
 #endif
 {
 	// adapted from inigo quilez - iq/2013
@@ -13,11 +16,26 @@ __kernel void device_function( __global int* a, uint w, uint h)
 	if (id >= (512 * 512)) return;
 	float2 fragCoord = (float2)( (float)idx, (float)idy ), resolution = (float2)( 512, 512 );
 	float3 col = (float3)( 0.f, 0.f, 0.f );
+	uint w = pw *32;
+	uint n = 0;
 
-	for( int y = 1; y < h - 1; y++ ) for( int x = 1; x < w - 1; x++ )
-	{
+	
 
-	}
+	n = GetBit( x - 1, y - 1, pw, a) + GetBit( x, y - 1, pw, a) + GetBit( x + 1, y - 1, pw, a) + GetBit( x - 1, y, pw, a) +
+		GetBit( x + 1, y, pw, a) + GetBit( x - 1, y + 1, pw, a) + GetBit( x, y + 1, pw, a) + GetBit( x + 1, y + 1, pw, a);
+    if ((GetBit( x, y, pw, a) == 1 && n ==2) || n == 3) col = (float3)(1.0f, 1.0f, 1.0f);
+
+
+
+	//C# code:
+	//uint n = GetBit( x - 1, y - 1 ) + GetBit( x, y - 1 ) + GetBit( x + 1, y - 1 ) + GetBit( x - 1, y ) +
+    //                GetBit( x + 1, y ) + GetBit( x - 1, y + 1 ) + GetBit( x, y + 1 ) + GetBit( x + 1, y + 1 );
+    //            if ((GetBit( x, y ) == 1 && n ==2) || n == 3) BitSet( x, y );
+	// helper function for setting one bit in the pattern buffer
+
+    //    void BitSet( uint x, uint y ) { pattern[y * pw + (x >> 5)] |= 1U << (int)(x & 31); }
+    // helper function for getting one bit from the secondary pattern buffer
+    //    uint GetBit( uint x, uint y ) { return (second[y * pw + (x >> 5)] >> (int)(x & 31)) & 1U; }
 
 
 	/*for( int m = 0; m < 4; m++ ) for( int n = 0; n < 4; n++ )
