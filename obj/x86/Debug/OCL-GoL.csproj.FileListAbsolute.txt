@@ -18,3 +18,14 @@ C:\Users\elise\OneDrive\Documenten\Gametech\Concurrency\P3\GameOfLife\obj\x86\De
 C:\Users\elise\OneDrive\Documenten\Gametech\Concurrency\P3\GameOfLife\obj\x86\Debug\OCL-GoL.csproj.CoreCompileInputs.cache
 C:\Users\elise\OneDrive\Documenten\Gametech\Concurrency\P3\GameOfLife\obj\x86\Debug\ConsoleApplication.exe
 C:\Users\elise\OneDrive\Documenten\Gametech\Concurrency\P3\GameOfLife\obj\x86\Debug\ConsoleApplication.pdb
+C:\Users\Menno\OneDrive\Documenten\GitHub\GameOfLife\bin\Debug\ConsoleApplication.exe
+C:\Users\Menno\OneDrive\Documenten\GitHub\GameOfLife\bin\Debug\ConsoleApplication.pdb
+C:\Users\Menno\OneDrive\Documenten\GitHub\GameOfLife\bin\Debug\Cloo.clSharp.dll
+C:\Users\Menno\OneDrive\Documenten\GitHub\GameOfLife\bin\Debug\OpenTK.dll
+C:\Users\Menno\OneDrive\Documenten\GitHub\GameOfLife\bin\Debug\OpenTK.pdb
+C:\Users\Menno\OneDrive\Documenten\GitHub\GameOfLife\bin\Debug\OpenTK.xml
+C:\Users\Menno\OneDrive\Documenten\GitHub\GameOfLife\obj\x86\Debug\OCL-GoL.csprojAssemblyReference.cache
+C:\Users\Menno\OneDrive\Documenten\GitHub\GameOfLife\obj\x86\Debug\OCL-GoL.csproj.CoreCompileInputs.cache
+C:\Users\Menno\OneDrive\Documenten\GitHub\GameOfLife\obj\x86\Debug\OCL-GoL.csproj.CopyComplete
+C:\Users\Menno\OneDrive\Documenten\GitHub\GameOfLife\obj\x86\Debug\ConsoleApplication.exe
+C:\Users\Menno\OneDrive\Documenten\GitHub\GameOfLife\obj\x86\Debug\ConsoleApplication.pdb
