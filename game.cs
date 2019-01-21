@@ -19,7 +19,7 @@ namespace Template
         // find the kernel named 'device_function' in the program
         OpenCLKernel kernel = new OpenCLKernel( ocl, "device_function" );
         // create a regular buffer; by default this resides on both the host and the device
-        OpenCLBuffer<int> buffer = new OpenCLBuffer<int>( ocl, 512 * 512 );
+        OpenCLBuffer<uint> buffer;
         // create an OpenGL texture to which OpenCL can send data
         OpenCLImage<int> image = new OpenCLImage<int>( ocl, 512, 512 );
         public Surface screen;
@@ -62,7 +62,11 @@ namespace Template
                             state = n = 0;
                         }
                     }
+                
+
             }
+            buffer = new OpenCLBuffer<uint>(ocl, pattern);
+            buffer.CopyToDevice();
             // swap buffers
             for (int i = 0; i < pw * ph; i++) second[i] = pattern[i];
         }
@@ -105,11 +109,13 @@ namespace Template
                 // get the data from the device to the host
                 buffer.CopyFromDevice();
                 // plot pixels using the data on the host
-                for( int y = 0; y < 512; y++ ) for( int x = 0; x < 512; x++ )
+                /*for( int y = 0; y < 512; y++ ) for( int x = 0; x < 512; x++ )
                 {
-                    screen.pixels[x + y * screen.width] = buffer[x + y * 512];
-                }
+                    screen.pixels[x + y * screen.width] =  buffer[x + y * 512];
+                }*/
+                
             }
+            Render();
         }
         public void Render()
         {
