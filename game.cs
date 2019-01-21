@@ -81,6 +81,7 @@ namespace Template
         public void Tick()
         {
             GL.Finish();
+            timer.Restart();
             // clear the screen
             screen.Clear( 0 );
             // do opencl stuff
@@ -92,6 +93,9 @@ namespace Template
             // execute kernel
             long [] workSize = { 512, 512 };
             long [] localSize = { 32, 4 };
+            buffer.CopyToDevice();
+            // swap buffers
+            for (int i = 0; i < pw * ph; i++) second[i] = pattern[i];
             if (GLInterop)
             {
                 // INTEROP PATH:
@@ -112,6 +116,8 @@ namespace Template
                 // OpenCLBuffer<int> object (buffer). After filling the buffer, it
                 // is copied to the screen surface, so the template code can show
                 // it in the window.
+                
+                
                 // execute the kernel
                 kernel.Execute( workSize, localSize );
                 // get the data from the device to the host
@@ -132,6 +138,7 @@ namespace Template
                     if (GetBit(x + xoffset, y + yoffset) == 1) screen.Plot((int)x, (int)y, 0xffffff);
             // report performance
             Console.WriteLine("generation " + generation++ + ": " + timer.ElapsedMilliseconds + "ms");
+
             // use OpenGL to draw a quad using the texture that was filled by OpenCL
 
             /*if (GLInterop)
