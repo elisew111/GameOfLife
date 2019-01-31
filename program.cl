@@ -2,7 +2,7 @@
 
 
 uint GetBit( int x, int y, uint pw, __global uint* second ) { return (second[y * pw + (x >> 5)] >> (int)(x & 31)) & 1U; }
-void BitSet( int x, int y, uint pw, __global uint* pattern) { pattern[y * pw + (x >> 5)] |= 1U << (int)(x & 31); }
+void BitSet( int x, int y, uint pw, __global uint* pattern) { atomic_or(&pattern[y * pw + (x >> 5)],1U << (int)(x & 31)); }
 //void UnBitSet( int x, int y, uint pw, __global uint* pattern) { pattern[y * pw + (x >> 5)] |= 0U << (int)(x & 31); }
 
 #ifdef GLINTEROP
