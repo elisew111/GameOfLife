@@ -18,6 +18,29 @@ namespace Template
         uint GetBit(uint x, uint y) { return (second[y * pw + (x >> 5)] >> (int)(x & 31)) & 1U; }
         // mouse handling: dragging functionality
         uint xoffset = 0, yoffset = 0;
+        bool lastLButtonState = false;
+        int dragXStart, dragYStart, offsetXStart, offsetYStart;
+        public void SetMouseState(int x, int y, bool pressed)
+        {
+            if (pressed)
+            {
+                if (lastLButtonState)
+                {
+                    int deltax = x - dragXStart, deltay = y - dragYStart;
+                    xoffset = (uint)Math.Min(pw * 32 - screen.width, Math.Max(0, offsetXStart - deltax));
+                    yoffset = (uint)Math.Min(ph - screen.height, Math.Max(0, offsetYStart - deltay));
+                }
+                else
+                {
+                    dragXStart = x;
+                    dragYStart = y;
+                    offsetXStart = (int)xoffset;
+                    offsetYStart = (int)yoffset;
+                    lastLButtonState = true;
+                }
+            }
+            else lastLButtonState = false;
+        }
 
 
         // when GLInterop is set to true, the fractal is rendered directly to an OpenGL texture
@@ -42,7 +65,7 @@ namespace Template
         public void Init()
         {
             //gekopieerd uit gameoflife
-            StreamReader sr = new StreamReader("../../samples/c4-orthogonal.rle");
+            StreamReader sr = new StreamReader("../../samples/turing_js_r.rle");
             uint state = 0, n = 0, x = 0, y = 0;
             while (true)
             {

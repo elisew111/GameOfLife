@@ -20,6 +20,26 @@ namespace Template
     {
         static int screenID;
         static Game game;
+
+        internal static class CursorPosition
+        {
+            [StructLayout(LayoutKind.Sequential)]
+            public struct POINT
+            {
+                public int X;
+                public int Y;
+                public static implicit operator Point(POINT point) { return new Point(point.X, point.Y); }
+            }
+            [DllImport("user32.dll")]
+            public static extern bool GetCursorPos(out POINT lpPoint);
+            public static Point GetCursorPosition()
+            {
+                POINT lpPoint;
+                GetCursorPos(out lpPoint);
+                return lpPoint;
+            }
+        }
+
         protected override void OnLoad( EventArgs e )
         {
             // called upon app init
@@ -48,11 +68,14 @@ namespace Template
             GL.LoadIdentity();
             GL.Ortho( -1.0, 1.0, -1.0, 1.0, 0.0, 4.0 );
         }
-        protected override void OnUpdateFrame( FrameEventArgs e )
+        protected override void OnUpdateFrame(FrameEventArgs e)
         {
             // called once per frame; app logic
             var keyboard = OpenTK.Input.Keyboard.GetState();
             if (keyboard[OpenTK.Input.Key.Escape]) this.Exit();
+            var mouse = OpenTK.Input.Mouse.GetState();
+            Point p = CursorPosition.GetCursorPosition();
+            game.SetMouseState(p.X, p.Y, mouse.LeftButton == ButtonState.Pressed);
         }
         protected override void OnRenderFrame( FrameEventArgs e )
         {
