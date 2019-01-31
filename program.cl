@@ -11,22 +11,14 @@ __kernel void device_function( write_only image2d_t a, uint pw, uint h)
 __kernel void device_function( __global uint* p, __global uint* s, uint pw, uint h)
 #endif
 {
-	// adapted from inigo quilez - iq/2013
 	int idx = get_global_id( 0 );
 	int idy = get_global_id( 1 );
-	int id = idx + 512 * idy;
-	if (id >= (512 * 512)) return;
-	float2 fragCoord = (float2)( (float)idx, (float)idy ), resolution = (float2)( 512, 512 );
-	float3 col = (float3)( 0.f, 0.f, 0.f );
-	uint w = pw *32;
 	uint n = 0;
 
-	
-	
 	n = GetBit( idx - 1, idy - 1, pw, s) + GetBit( idx, idy - 1, pw, s) + GetBit( idx + 1, idy - 1, pw, s) + GetBit( idx - 1, idy, pw, s) +
 		GetBit( idx + 1, idy, pw, s) + GetBit( idx - 1, idy + 1, pw, s) + GetBit( idx, idy + 1, pw, s) + GetBit( idx + 1, idy + 1, pw, s);
     if ((GetBit( idx, idy, pw, s) == 1 && n ==2) || n == 3) BitSet( idx, idy, pw, p);
-	//else UnBitSet( idx, idy, pw, p);
+	
 
 
 

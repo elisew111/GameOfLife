@@ -78,7 +78,6 @@ namespace Template
                     String[] sub = line.Split(new char[] { '=', ',' }, StringSplitOptions.RemoveEmptyEntries);
                     pw = (UInt32.Parse(sub[1]) + 31) / 32;
                     ph = UInt32.Parse(sub[3]);
-                    //w = pw * 32;
                     pattern = new uint[pw * ph];
                     second = new uint[pw * ph];
                 }
@@ -148,7 +147,7 @@ namespace Template
 
             // execute kernel
             //pattern = new uint[pw * ph];
-            long[] workSize = { 512, 512 };
+            long[] workSize = { 2048, 2048 };
             long[] localSize = { 32, 4 };
             //pBuffer.CopyToDevice();
             //sBuffer.CopyToDevice();
