@@ -42,7 +42,7 @@ namespace Template
         public void Init()
         {
             //gekopieerd uit gameoflife
-            StreamReader sr = new StreamReader("../../samples/turing_js_r.rle");
+            StreamReader sr = new StreamReader("../../samples/c4-orthogonal.rle");
             uint state = 0, n = 0, x = 0, y = 0;
             while (true)
             {
@@ -176,7 +176,7 @@ namespace Template
         public void Render()
         {
             screen.Clear(0);
-            for (uint y = 0; y < screen.height; y++) for (uint x = 0; x < screen.width; x++)
+            for (uint y = 0; y < Math.Min(ph, screen.height); y++) for (uint x = 0; x < screen.width; x++)
                     if (GetBit(x + xoffset, y + yoffset) == 1) screen.Plot((int)x, (int)y, 0xffffff);
             // report performance
             Console.WriteLine("generation " + generation++ + ": " + timer.ElapsedMilliseconds + "ms");
