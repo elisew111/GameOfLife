@@ -23,13 +23,13 @@ namespace Template
         // when GLInterop is set to true, the fractal is rendered directly to an OpenGL texture
         bool GLInterop = false;
         // load the OpenCL program; this creates the OpenCL context
-        static OpenCLProgram ocl = new OpenCLProgram( "../../program.cl" );
+        static OpenCLProgram ocl = new OpenCLProgram("../../program.cl");
         // find the kernel named 'device_function' in the program
-        OpenCLKernel kernel = new OpenCLKernel( ocl, "device_function" );
+        OpenCLKernel kernel = new OpenCLKernel(ocl, "device_function");
         // create a regular buffer; by default this resides on both the host and the device
         OpenCLBuffer<uint> pBuffer, sBuffer;
         // create an OpenGL texture to which OpenCL can send data
-        OpenCLImage<int> image = new OpenCLImage<int>( ocl, 512, 512 );
+        OpenCLImage<int> image = new OpenCLImage<int>(ocl, 512, 512);
         public Surface screen;
         Stopwatch timer = new Stopwatch();
         float t = 21.5f;
@@ -55,7 +55,7 @@ namespace Template
                     String[] sub = line.Split(new char[] { '=', ',' }, StringSplitOptions.RemoveEmptyEntries);
                     pw = (UInt32.Parse(sub[1]) + 31) / 32;
                     ph = UInt32.Parse(sub[3]);
-                    w = pw * 32;
+                    //w = pw * 32;
                     pattern = new uint[pw * ph];
                     second = new uint[pw * ph];
                 }
@@ -70,18 +70,22 @@ namespace Template
                             state = n = 0;
                         }
                     }
-                
+
 
             }
+
+            // swap buffers
+            for (int i = 0; i < pw * ph; i++) second[i] = pattern[i];
+
+
             pBuffer = new OpenCLBuffer<uint>(ocl, pattern);
             sBuffer = new OpenCLBuffer<uint>(ocl, second);
 
 
 
-            // swap buffers
-            for (int i = 0; i < pw * ph; i++) second[i] = pattern[i];
-            pattern = new uint[pw * ph];
-            
+
+            //pattern = new uint[pw * ph];
+
             pBuffer.CopyToDevice();
             sBuffer.CopyToDevice();
         }
@@ -90,9 +94,23 @@ namespace Template
             GL.Finish();
             timer.Restart();
             // clear the screen
-            screen.Clear( 0 );
+            screen.Clear(0);
             // do opencl stuff
+
+            //GERT: DIT IS DE BUG:
+            //De buffer pakt een pointer naar de array, dus als je dan een new doet krijg je een nieuwe pointer maar die is niet gelinked aan de buffer.
+            //Als je simpelweg met een loop alles op 0 zet, of een nieuwe buffer aanmaakt met de nieuwe pointer, dan werkt hij. Ik raad aan het 1e te doen.
+
+
+            // clear destination pattern
+            //Fix 1, doe deze maar :) buffer aanmaken is beetje duur
+            for (int i = 0; i < pw * ph; i++) pattern[i] = 0;
+            pBuffer.CopyToDevice();
+            //Fix 2
             //pattern = new uint[pw * ph];
+            //pBuffer = new OpenCLBuffer<uint>(ocl, pattern);
+
+
             //pBuffer.CopyToDevice();
             if (GLInterop) kernel.SetArgument(0, image);
             else
@@ -101,14 +119,14 @@ namespace Template
                 kernel.SetArgument(1, sBuffer);
             }
 
-            kernel.SetArgument( 2, pw);
+            kernel.SetArgument(2, pw);
             kernel.SetArgument(3, ph);
             t += 0.1f;
 
             // execute kernel
             //pattern = new uint[pw * ph];
-            long [] workSize = { 512, 512 };
-            long [] localSize = { 32, 4 };
+            long[] workSize = { 512, 512 };
+            long[] localSize = { 32, 4 };
             //pBuffer.CopyToDevice();
             //sBuffer.CopyToDevice();
             // swap buffers
@@ -119,11 +137,11 @@ namespace Template
                 // Render method to draw a screen filling quad. This is the fastest
                 // option, but interop may not be available on older systems.
                 // lock the OpenGL texture for use by OpenCL
-                kernel.LockOpenGLObject( image.texBuffer );
+                kernel.LockOpenGLObject(image.texBuffer);
                 // execute the kernel
-                kernel.Execute( workSize, localSize );
+                kernel.Execute(workSize, localSize);
                 // unlock the OpenGL texture so it can be used for drawing a quad
-                kernel.UnlockOpenGLObject( image.texBuffer );
+                kernel.UnlockOpenGLObject(image.texBuffer);
             }
             else
             {
@@ -132,10 +150,10 @@ namespace Template
                 // OpenCLBuffer<int> object (buffer). After filling the buffer, it
                 // is copied to the screen surface, so the template code can show
                 // it in the window.
-                
-                
+
+
                 // execute the kernel
-                kernel.Execute( workSize, localSize );
+                kernel.Execute(workSize, localSize);
                 // get the data from the device to the host
                 pBuffer.CopyFromDevice();
                 sBuffer.CopyFromDevice();
@@ -144,17 +162,16 @@ namespace Template
                 {
                     screen.pixels[x + y * screen.width] =  buffer[x + y * 512];
                 }*/
-                
+
             }
             for (int i = 0; i < pw * ph; i++) second[i] = pattern[i];
 
             Render();
 
-            pattern = new uint[pw * ph];
             pBuffer.CopyToDevice();
             sBuffer.CopyToDevice();
 
-            
+
         }
         public void Render()
         {
@@ -180,4 +197,3 @@ namespace Template
         }
     } // class Game
 } // namespace Template
-
