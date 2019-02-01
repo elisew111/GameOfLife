@@ -12,7 +12,7 @@ namespace Template
 {
     class Game
     {
-
+        string borderMode = "";
         int generation = 0;
         // helper function for getting one bit from the secondary pattern buffer
         uint GetBit(uint x, uint y) { return (second[y * pw + (x >> 5)] >> (int)(x & 31)) & 1U; }
@@ -45,8 +45,9 @@ namespace Template
 
         // load the OpenCL program; this creates the OpenCL context
         static OpenCLProgram ocl = new OpenCLProgram("../../program.cl");
-        // find the kernel named 'device_function' in the program
-        OpenCLKernel kernel = new OpenCLKernel(ocl, "wrap_mode"); // "wrap_mode" to wrap edges, "dead_mode" to treat outside edges as dead cells
+        // find the kernel  in the program
+
+        OpenCLKernel kernel;
         // create a regular buffer; by default this resides on both the host and the device
         OpenCLBuffer<uint> pBuffer, sBuffer;
         // create an OpenGL texture to which OpenCL can send data
@@ -61,6 +62,14 @@ namespace Template
 
         public void Init()
         {
+            while (borderMode != "wrap_mode" && borderMode != "dead_mode")
+            {
+                Console.WriteLine("Border control: Would you like to use wrapping borders (wrap/w) or 'dead' borders (dead/d)?");
+                borderMode = Console.ReadLine();
+                if (borderMode == "w" || borderMode == "wrap") borderMode = "wrap_mode";
+                if (borderMode == "d" || borderMode == "dead") borderMode = "dead_mode";
+            }
+            kernel = new OpenCLKernel(ocl, borderMode);
             //gekopieerd uit gameoflife
             StreamReader sr = new StreamReader("../../c4-orthogonal.rle");
             uint state = 0, n = 0, x = 0, y = 0;
