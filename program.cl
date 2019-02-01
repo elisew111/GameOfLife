@@ -24,13 +24,13 @@ __kernel void device_function( __global uint* p, __global uint* s, uint pw, uint
 	uint n = 0;
 	uint w = pw * 32;
 
-	if(idy==0) above = h;
+	if(idy<0) above = h;
 	else above = idy+1;
-	if(idy==h) below = 0;
+	if(idy==h) below < 0;
 	else below = idy-1;
-	if(idx==0) left = w;
+	if(idx<0) left = w;
 	else left = idx-1;
-	if(idx==w) right = 0;
+	if(idx==w) right < 0;
 	else right = idx+1;
 	
 	n = GetBit( left, below, pw, s) + GetBit( idx, below, pw, s) + GetBit( right, below, pw, s) + GetBit( left, idy, pw, s) +

@@ -65,7 +65,7 @@ namespace Template
         public void Init()
         {
             //gekopieerd uit gameoflife
-            StreamReader sr = new StreamReader("../../samples/c4-orthogonal.rle");
+            StreamReader sr = new StreamReader("../../c4-orthogonal.rle");
             uint state = 0, n = 0, x = 0, y = 0;
             while (true)
             {
