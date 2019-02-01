@@ -48,7 +48,8 @@ namespace Template
         // load the OpenCL program; this creates the OpenCL context
         static OpenCLProgram ocl = new OpenCLProgram("../../program.cl");
         // find the kernel named 'device_function' in the program
-        OpenCLKernel kernel = new OpenCLKernel(ocl, "device_function");
+        
+        OpenCLKernel kernel = new OpenCLKernel(ocl, "dead_mode"); // "wrap_mode" to wrap edges, "dead_mode" to treat outside edges as dead cells
         // create a regular buffer; by default this resides on both the host and the device
         OpenCLBuffer<uint> pBuffer, sBuffer;
         // create an OpenGL texture to which OpenCL can send data
