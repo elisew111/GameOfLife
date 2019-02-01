@@ -13,6 +13,7 @@ namespace Template
     class Game
     {
         string borderMode = "";
+        string GoL_map = "";
         int generation = 0;
         // helper function for getting one bit from the secondary pattern buffer
         uint GetBit(uint x, uint y) { return (second[y * pw + (x >> 5)] >> (int)(x & 31)) & 1U; }
@@ -59,19 +60,17 @@ namespace Template
         uint[] second;
         uint pw, ph, w; // note: pw is in uints; width in bits is 32 this value.
         void BitSet(uint x, uint y) { pattern[y * pw + (x >> 5)] |= 1U << (int)(x & 31); }
+        
 
         public void Init()
         {
-            while (borderMode != "wrap_mode" && borderMode != "dead_mode")
-            {
-                Console.WriteLine("Border control: Would you like to use wrapping borders (wrap/w) or 'dead' borders (dead/d)?");
-                borderMode = Console.ReadLine();
-                if (borderMode == "w" || borderMode == "wrap") borderMode = "wrap_mode";
-                if (borderMode == "d" || borderMode == "dead") borderMode = "dead_mode";
-            }
+            
+            getInputs();
+
             kernel = new OpenCLKernel(ocl, borderMode);
             //gekopieerd uit gameoflife
-            StreamReader sr = new StreamReader("../../c4-orthogonal.rle");
+
+            StreamReader sr = new StreamReader(GoL_map);
             uint state = 0, n = 0, x = 0, y = 0;
             while (true)
             {
@@ -157,6 +156,34 @@ namespace Template
                     if (GetBit(x + xoffset, y + yoffset) == 1) screen.Plot((int)x, (int)y, 0xffffff);
             // report performance
             Console.WriteLine("generation " + generation++ + ": " + timer.ElapsedMilliseconds + "ms");
+        }
+
+        public void getInputs()
+        {
+            Console.WriteLine("____________________________________________________________________________");
+            Console.WriteLine("Welcome to the Game of Life!");
+            
+            //Getting choice of map
+            Console.WriteLine("Which map would you like to use? (default: c4-orthogonal.rle)");
+            Console.WriteLine("1: c4-orthogonal.rle");
+            Console.WriteLine("2: turing_js_r.rle");
+            Console.WriteLine("3: metapixel-galaxy.rle");
+            Console.WriteLine("4: other (risky)");
+            GoL_map = Console.ReadLine();
+
+            if (GoL_map == "2") { GoL_map = "../../samples/turing_js_r.rle"; }
+            else if (GoL_map == "3") { GoL_map = "../../samples/metapixel-galaxy.rle"; }
+            else if (GoL_map == "4") { Console.WriteLine("Enter filepath:"); GoL_map = Console.ReadLine(); }
+            else { GoL_map = "../../samples/c4-orthogonal.rle"; }
+
+            //Getting choice of border control
+            while (borderMode != "wrap_mode" && borderMode != "dead_mode")
+            {
+                Console.WriteLine("Border control: Would you like to use wrapping borders (wrap/w) or 'dead' borders (dead/d)?");
+                borderMode = Console.ReadLine();
+                if (borderMode == "w" || borderMode == "wrap") borderMode = "wrap_mode";
+                if (borderMode == "d" || borderMode == "dead") borderMode = "dead_mode";
+            }
         }
     } // class Game
 } // namespace Template
