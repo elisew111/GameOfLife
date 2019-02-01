@@ -65,7 +65,7 @@ namespace Template
         public void Init()
         {
             //gekopieerd uit gameoflife
-            StreamReader sr = new StreamReader("../../samples/turing_js_r.rle");
+            StreamReader sr = new StreamReader("../../samples/c4-orthogonal.rle");
             uint state = 0, n = 0, x = 0, y = 0;
             while (true)
             {
@@ -78,6 +78,7 @@ namespace Template
                     String[] sub = line.Split(new char[] { '=', ',' }, StringSplitOptions.RemoveEmptyEntries);
                     pw = (UInt32.Parse(sub[1]) + 31) / 32;
                     ph = UInt32.Parse(sub[3]);
+                    if (screen.height > ph) ph = (uint)screen.height;
                     pattern = new uint[pw * ph];
                     second = new uint[pw * ph];
                 }
@@ -93,6 +94,7 @@ namespace Template
                         }
                     }
 
+                if (screen.height > ph) ph = (uint) screen.height;
 
             }
 
