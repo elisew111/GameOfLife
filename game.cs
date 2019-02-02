@@ -6,15 +6,17 @@ using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Template
 {
     class Game
     {
+       
         string borderMode = "";
         string GoL_map = "";
         int generation = 0;
+        double zoom = 0.5;
         // helper function for getting one bit from the secondary pattern buffer
         uint GetBit(uint x, uint y) { return (second[y * pw + (x >> 5)] >> (int)(x & 31)) & 1U; }
         // mouse handling: dragging functionality
@@ -41,7 +43,10 @@ namespace Template
                 }
             }
             else lastLButtonState = false;
+
         }
+
+        
 
 
         // load the OpenCL program; this creates the OpenCL context
@@ -111,17 +116,16 @@ namespace Template
         }
         public void Tick()
         {
+            if (Keyboard.IsKeyDown(Key.Up)) zoom -= 0.1;
+            if (Keyboard.IsKeyDown(Key.Down)) zoom += 0.1;
+
             GL.Finish();
             timer.Restart();
             // clear the screen
             screen.Clear(0);
             // clear destination pattern
-            //Fix 1
             for (int i = 0; i < pw * ph; i++) pattern[i] = 0;
             pBuffer.CopyToDevice();
-            //Fix 2
-            //pattern = new uint[pw * ph];
-            //pBuffer = new OpenCLBuffer<uint>(ocl, pattern);
 
 
             //pBuffer.CopyToDevice();
@@ -152,8 +156,13 @@ namespace Template
         public void Render()
         {
             screen.Clear(0);
+
             for (uint y = 0; y < Math.Min(ph, screen.height); y++) for (uint x = 0; x < screen.width; x++)
-                    if (GetBit(x + xoffset, y + yoffset) == 1) screen.Plot((int)x, (int)y, 0xffffff);
+                {
+                    double celX = (x / zoom) - (x % zoom);
+                    double celY = (y / zoom) - (y % zoom);
+                    if (GetBit(x + xoffset, y + yoffset) == 1) screen.Plot((int)celX, (int)celY, 0xffffff);
+                }
             // report performance
             Console.WriteLine("generation " + generation++ + ": " + timer.ElapsedMilliseconds + "ms");
         }
