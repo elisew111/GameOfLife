@@ -16,22 +16,26 @@ namespace Template
         string borderMode = "";
         string GoL_map = "";
         int generation = 0;
-        double zoom = 0.5;
+        double zoom = 1;
+        uint pw, ph, w; // note: pw is in uints; width in bits is 32 this value.
         // helper function for getting one bit from the secondary pattern buffer
         uint GetBit(uint x, uint y) { return (second[y * pw + (x >> 5)] >> (int)(x & 31)) & 1U; }
         // mouse handling: dragging functionality
         uint xoffset = 0, yoffset = 0;
         bool lastLButtonState = false;
         int dragXStart, dragYStart, offsetXStart, offsetYStart;
+        
+
         public void SetMouseState(int x, int y, bool pressed)
         {
+            
             if (pressed)
             {
                 if (lastLButtonState)
                 {
                     int deltax = x - dragXStart, deltay = y - dragYStart;
                     xoffset = (uint)Math.Min(pw * 32 - screen.width, Math.Max(0, offsetXStart - deltax));
-                    yoffset = (uint)Math.Min(ph - screen.height, Math.Max(0, offsetYStart - deltay));
+                    yoffset = (uint)Math.Min(ph  - screen.height, Math.Max(0, offsetYStart - deltay));
                 }
                 else
                 {
@@ -63,7 +67,7 @@ namespace Template
         float t = 21.5f;
         uint[] pattern;
         uint[] second;
-        uint pw, ph, w; // note: pw is in uints; width in bits is 32 this value.
+        
         void BitSet(uint x, uint y) { pattern[y * pw + (x >> 5)] |= 1U << (int)(x & 31); }
         
 
@@ -193,6 +197,7 @@ namespace Template
                 if (borderMode == "w" || borderMode == "wrap") borderMode = "wrap_mode";
                 if (borderMode == "d" || borderMode == "dead") borderMode = "dead_mode";
             }
+            Console.WriteLine("Use Up and Down arrows to zoom. Drag the mouse to move the camera.");
         }
     } // class Game
 } // namespace Template
